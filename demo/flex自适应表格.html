@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>flex自适应表格</title>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div class="tableBox">
+        <ul class="box">
+            <li class="item main">表格头</li>
+            <li class="item">表格头秩序</li>
+            <li class="item">表格头是</li>
+            <li class="item">表格山豆根山豆根头</li>
+            <li class="item">表格头顶顶顶顶</li>
+        </ul>
+        <ul class="box">
+            <li class="item main">内容山豆根山豆根山豆根湖广会馆湖广会馆规划</li>
+            <li class="item">内容山豆根山豆根</li>
+            <li class="item">内容水水水水水水水水水水水水水</li>
+            <li class="item">内容是</li>
+            <li class="item">内容</li>
+        </ul>
+    </div>
+</body>
+<style>
+    ul,
+    li {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        font: inherit;
+        vertical-align: baseline;
+        list-style: none;
+    }
+
+    .tableBox {
+        width: 100%;
+    }
+
+    .box {
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+    }
+
+    .item {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        flex: 1;
+        border: 1px solid black;
+    }
+
+    .main {
+        flex: 1 0 150px;
+    }
+</style>
+
+</html>

@@ -1,0 +1,108 @@
+# Vue 篇
+
+## vue2 双向绑定
+
+```
+<div>
+    name: <input id="name" />
+    val: <input id="val" />
+    list: <input id="list" />
+</div>
+```
+
+```
+    // 监听Model下的name属性，当name属性有变化时要引起页面id=name的响应变化
+    const model = {
+      name: 'vue',
+      data: {
+        val: 1
+      },
+      list: [1]
+    }
+    //
+    function observe(obj) {
+      // 遍历所有属性，各自监听
+      Object.keys(obj).map(key => {
+        if (typeof obj[key] == 'object') {
+          // 是对象属性的再次监听
+          observe(obj[key])
+        } else {
+          // 非对象属性的做监听
+          defineReactive(obj, key, obj[key])
+        }
+      })
+    }
+
+    // 利用Object.defineProperty创建一个监听器
+    function defineReactive(obj, key, val) {
+      Object.defineProperty(obj, key, {
+        get() {
+          return val;
+        },
+        set(newVal) {
+          // 当有新值设置时，执行setter
+          console.log(`${key}变化：从${val}到${newVal}`);
+          // 解析到页面，将变化的数据响应到页面上
+          if (Array.isArray(obj)) {
+            document.querySelector(`#list`).value = newVal;
+          } else {
+            document.querySelector(`#${key}`).value = newVal;
+          }
+          val = newVal;
+
+        }
+      })
+    }
+
+    // 调用监听器，对model开始监听
+    observe(model);
+```
+
+## vue3 Proxy 实现双向绑定
+
+````
+    // 监听Model下的name属性，当name属性有变化时要引起页面id=name的响应变化
+    let model = {
+      name: 'vue',
+      data: {
+        val: 1
+      },
+      list: [1]
+    }
+    function isObj(obj) {
+      return typeof obj === 'object'
+    }
+    //
+    function observe(data) {
+
+      Object.keys(data).map(key => {
+        if (isObj(data[key])) {
+          data[key] = observe(data[key]);
+        }
+
+      })
+      return defineProxy(data)
+    }
+
+    // 利用Proxy创建一个监听器
+    function defineProxy(obj) {
+      return new Proxy(obj, {
+        set(obj, key, val) {
+          console.log(`属性${key}变化为${val}`);
+          compile(obj, key, val)
+          return Reflect.set(...arguments);
+        }
+      })
+    }
+    // 解析器，响应页面变化
+    function compile(obj, id, val) {
+      if (Array.isArray(obj)) { // 数组变化
+        document.querySelector('#list').value = model.list;
+      } else {
+        document.querySelector(`#${id}`).value = val;
+      }
+    }
+
+    // 调用监听器，对model开始监听
+    model = observe(model);
+````
